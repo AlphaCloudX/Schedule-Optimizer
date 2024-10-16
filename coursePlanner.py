@@ -7,7 +7,7 @@ from sortingMethods import *
 # Input and data loading logic
 # Use the list instead of retyping everything
 usePredefinedList = True
-course_codes = ["MATH*1210", "STAT*2050", "CIS*3110", "CIS*2750", "CIS*3490"]
+course_codes = ["CIS*2750", "CIS*3110", "CIS*3190", "CIS*3490", "MGMT*2150"]
 
 # How to calculate First Class Of Day?
 # HH : MM
@@ -20,10 +20,16 @@ course_codes = ["MATH*1210", "STAT*2050", "CIS*3110", "CIS*2750", "CIS*3490"]
 # HH = 0 | just 1pm
 # We Do (13 * 60) + 0
 # LEAVE TO 0 FOR NOW IF YOU DO NOT WANT TO USE THIS PARAMETER
-earliestAtSchool = (10 * 60) + 0
+earliestAtSchool = (11 * 60) + 0
 
 # Calculate Last Class Of Day
-latestAtSchool = (21 * 60) + 00
+latestAtSchool = (0 * 60) + 00
+
+# Sort by the avg start time of the first class
+# True will sort the avg start time by low to high
+sortByAvgStartTime = True
+# If this is set to true it will sort by the latest class time
+sortByLatestTime = False
 
 # remove this for now since it's probably easier to hardcode the values
 # earliestAtSchool = (10 * 60) + 30  # 10:30
@@ -88,23 +94,32 @@ validCombination = CoursePlanner(allCourseData).nonOverlapped()
 # CoursePlanner(allCourseData, earliestAtSchool).print_all_schedules()
 validCombination = filterByEarliestAtSchool(validCombination, earliestAtSchool)
 validCombination = filterByLatestAtSchool(validCombination, latestAtSchool)
-validCombination, sortedTimeIndices, times = filterByTotalMinTimeBetweenClasses(validCombination)
+validCombination, sortedTimeIndices1, times1 = filterByTotalMinTimeBetweenClasses(validCombination)
 
 print("Combinations After Including Filters:")
 
 # Print Sorted From Low To High:
-for i in sortedTimeIndices:
-    print(f"Combination: {i} | Total Time Between Classes = {times[i]} | Courses:")
+for i in sortedTimeIndices1:
+    print(f"Combination: {i} | Total Time Between Classes = {times1[i]} | Courses:")
     for c in validCombination[i]:
         print(c.courseCode)
 
     print("\n\n")
 
+if sortByAvgStartTime:
+    print("Sort By Avg Start Time:")
 
+    validCombination, sortedTimeIndices2, times2 = filterByAvgStartTime(validCombination, sortByLatestTime)
+
+    # Print Sorted From Low To High:
+    for i in sortedTimeIndices2:
+        print(f"Combination: {i} | AVG First Class = {times2[i]} | Total Time Between Classes = {times1[i]} | Courses:")
+        for c in validCombination[i]:
+            print(c.courseCode)
+
+        print("\n\n")
 
 # Uncomment this code to draw the schedules out:
-
-
 
 
 # Regular print

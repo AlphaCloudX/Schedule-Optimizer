@@ -33,8 +33,6 @@ def filterByEarliestAtSchool(schedule, startTime):
 
     return validCombinations
 
-    pass
-
 
 def filterByLatestAtSchool(schedule, endTime):
     # If the user does not want to filter by this
@@ -115,6 +113,48 @@ def filterByTotalMinTimeBetweenClasses(schedule):
     # Yoinked from https://stackoverflow.com/a/6423325/11521629
     # Better than using np since there is no dependency
     sortedTimeIndices = sorted(range(len(times)), key=times.__getitem__)
+
+    # print(f"After: {len(validCombinations)} Before: {len(schedule)}")
+
+    return schedule, sortedTimeIndices, times
+
+
+def filterByAvgStartTime(schedule, sortByLatest=False):
+    dateToIndexMap = {"M": 0, "T": 1, "W": 2, "Th": 3, "F": 4, "Sa": 5}
+
+    times = []
+
+    # Locate One Of The Possible Options
+    for possibleCombination in schedule:
+        week = [[], [], [], [], [], []]  # Create an empty list for each day (M-S)
+
+        for course in possibleCombination:
+            for schedule_item in [course.lecture, course.seminar, course.lab]:
+                if schedule_item is not None:
+                    for day in schedule_item.days:
+                        week[dateToIndexMap[day]].append((schedule_item.start, schedule_item.finish))
+
+        t = 0
+        daysOnCampus = 0
+
+        for w in range(len(week)):
+            # sort low to high based on the start times
+            week[w] = sorted(week[w], key=lambda x: x[0])
+
+            if week[w]:
+                daysOnCampus += 1
+                t += week[w][0][0]
+
+        times.append(t / daysOnCampus)
+
+    # Yoinked from https://stackoverflow.com/a/6423325/11521629
+    # Better than using np since there is no dependency
+
+    sortedTimeIndices = sorted(range(len(times)), key=times.__getitem__)
+
+    # reverse to show the latest classes
+    if sortByLatest:
+        sortedTimeIndices.reverse()
 
     # print(f"After: {len(validCombinations)} Before: {len(schedule)}")
 
