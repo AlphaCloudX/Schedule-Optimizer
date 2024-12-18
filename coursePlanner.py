@@ -1,14 +1,15 @@
 import itertools
 import json
 
-from exportToCalendar import *
 from CourseUtil import ScheduleItem, CourseSection, CoursePlanner
 from sortingMethods import *
+from exportToCalendar import exportToIcal
 
 # Input and data loading logic
 # Use the list instead of retyping everything
 usePredefinedList = True
-course_codes = ["CIS*2750", "CIS*3110", "CIS*3190", "CIS*3490", "MGMT*2150"]
+#course_codes = ["CIS*2750", "CIS*3110", "CIS*3190", "CIS*3490", "MGMT*2150"]
+course_codes = ["CIS*1050", "CIS*2250", "CIS*2500", "MATH*1160", "ANTH*1150"]
 
 # How to calculate First Class Of Day?
 # HH : MM
@@ -106,7 +107,6 @@ for i in sortedTimeIndices1:
         print(c.courseCode)
 
     print("\n\n")
-    break
 
 if sortByAvgStartTime:
     print("Sort By Avg Start Time:")
@@ -120,11 +120,21 @@ if sortByAvgStartTime:
             print(c.courseCode)
 
         print("\n\n")
-        break
 
-print("Choose combination: ")
-choice = int(input())
-exportToCal(validCombination[choice], allCourseData)
+#Prompt user to export to calendar
+while True:
+    export = input("Export To Calendar? (y/n): ")
+    if export == 'y':
+        while True:
+            choice = input("Choose combination: ")
+            if choice.isnumeric():
+                choice = int(choice)
+                if choice in sortedTimeIndices1 or choice in sortedTimeIndices2:
+                    exportToIcal(validCombination[choice], allCourseData)
+                    break
+        break
+    if export == 'n':
+        break
 
 # Uncomment this code to draw the schedules out:
 

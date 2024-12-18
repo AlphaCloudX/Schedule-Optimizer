@@ -2,7 +2,7 @@ from icalendar import Calendar, Event, vDatetime
 from datetime import datetime
 import zoneinfo
 
-def exportToCal(courses, allCourseData):
+def exportToIcal(courses, allCourseData):
     newCal = Calendar()
     for c in courses:
         for i in allCourseData:
@@ -36,6 +36,7 @@ def addScheduleItem(courseCode, item, cal):
         #reoccur every week until the last day of class: April 4, 2025
         lastDay = datetime(2025,4,4,0,0,0,0,tzinfo=zoneinfo.ZoneInfo("America/New_York"))
         newEvent.add('rrule', {'freq': 'weekly', 'until': lastDay})
+        #add event to calendar
         cal.add_component(newEvent)
 
 #get first time a schedule item occurs on "day"
