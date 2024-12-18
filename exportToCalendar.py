@@ -1,4 +1,4 @@
-from icalendar import Calendar, Event
+from icalendar import Calendar, Event, vDatetime
 from datetime import datetime
 import zoneinfo
 
@@ -15,6 +15,7 @@ def exportToCal(courses, allCourseData):
     print("Calendar exported.")
     newIcs.close()
 
+#add section items to calendar
 def addSectionItems(item, cal):
     if item.lecture != None:
         newEvent = addScheduleItem(item.courseCode, item.lecture, cal)
@@ -22,18 +23,23 @@ def addSectionItems(item, cal):
         newEvent = addScheduleItem(item.courseCode, item.seminar, cal)
     if item.lab != None:
         newEvent = addScheduleItem(item.courseCode, item.lab, cal)
-    
+
+#add schedule items to calendar
 def addScheduleItem(courseCode, item, cal):
     for i in item.days:            
         newEvent = Event()
         newEvent.add('summary', courseCode + ' ' + item.item_type)
         #start of the event
-        newEvent.add('dtstart', getCourseDateTime(item, item.start, i))
+        newEvent.add('dtstart', getScheduleItemDateTime(item, item.start, i))
         #end of the event
-        newEvent.add('dtend', getCourseDateTime(item, item.finish, i))
+        newEvent.add('dtend', getScheduleItemDateTime(item, item.finish, i))
+        #reoccur every week until the last day of class: April 4, 2025
+        lastDay = datetime(2025,4,4,0,0,0,0,tzinfo=zoneinfo.ZoneInfo("America/New_York"))
+        newEvent.add('rrule', {'freq': 'weekly', 'until': lastDay})
         cal.add_component(newEvent)
 
-def getCourseDateTime(item, time, day):
+#get first time a schedule item occurs on "day"
+def getScheduleItemDateTime(item, time, day):
     year = 2025
     month = 1
     hour = int(time / 60)
