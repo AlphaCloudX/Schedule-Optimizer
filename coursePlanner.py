@@ -8,8 +8,7 @@ from exportToCalendar import exportToIcal
 # Input and data loading logic
 # Use the list instead of retyping everything
 usePredefinedList = True
-#course_codes = ["CIS*2750", "CIS*3110", "CIS*3190", "CIS*3490", "MGMT*2150"]
-course_codes = ["CIS*1050", "CIS*2250", "CIS*2500", "MATH*1160", "ANTH*1150"]
+course_codes = ["CIS*2750", "CIS*3110", "CIS*3190", "CIS*3490", "MGMT*2150"]
 
 # How to calculate First Class Of Day?
 # HH : MM
