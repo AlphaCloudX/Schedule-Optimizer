@@ -1,6 +1,7 @@
 import itertools
 import json
 
+from exportToCalendar import *
 from CourseUtil import ScheduleItem, CourseSection, CoursePlanner
 from sortingMethods import *
 
@@ -105,6 +106,7 @@ for i in sortedTimeIndices1:
         print(c.courseCode)
 
     print("\n\n")
+    break
 
 if sortByAvgStartTime:
     print("Sort By Avg Start Time:")
@@ -118,6 +120,11 @@ if sortByAvgStartTime:
             print(c.courseCode)
 
         print("\n\n")
+        break
+
+print("Choose combination: ")
+choice = int(input())
+exportToCal(validCombination[choice], allCourseData)
 
 # Uncomment this code to draw the schedules out:
 
