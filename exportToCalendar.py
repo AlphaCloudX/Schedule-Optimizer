@@ -49,9 +49,9 @@ def getScheduleItemDateTime(item, time, day):
 
 #the day a course starts
 def getFirstDay(day):
-    week = ['M','T','W','Th','F']
+    week = ['M','T','W','Th','F', 'Sa']
     #dates of weekdays in the first week
-    dates = [6,7,8,9,10]
+    dates = [6,7,8,9,10,11]
     i = week.index(day)
     if(i != -1):
         return dates[i]
