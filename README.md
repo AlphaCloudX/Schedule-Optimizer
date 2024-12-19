@@ -3,7 +3,7 @@
 
 A python script to optimize your course layout to have minimal times between classes.
 
-Made by Michael
+Made by Michael, Contributions by Robert
 
 
 ## Features
@@ -11,12 +11,21 @@ Made by Michael
 - Ability To Enter How Many Courses
 - Sort from minimum to maximum time between classes
 - Ability to add earliest and latest class
-- No external dependencies needed
 - Supports DE Classes
+- Ability to export to calendar
 - Completely Free!
 
+## Dependencies
+
+- icalendar-6.1.0
 
 ## How to run
+
+Install dependencies:
+
+```bash
+pip install icalendar
+```
 
 To run this project modify the
 ```python
@@ -42,7 +51,7 @@ Lastly make sure the `outputW25NoProfNoRooms.json` is in the root directory with
 
 Once these variables are all set either through your IDE or text editor of choice you can run the python script in your terminal window.
 
-This is designed for python 3 so any version works, as mentioned above there are no external dependencies so it will work out of the box.
+This is designed for python 3 so any version works.
 
 To run the python script simply do:
 ```bash
@@ -54,19 +63,16 @@ python, python3, etc.
 
 It will then output a list of course codes in terminal.
 
+You will then be able to export a combination of course codes of your choice into an `.ics` file,
+which can be imported into a calendar program of your choice.
 
 ## Roadmap
 
 - Ability to generate the schedule into images for easy comparison
 
-- Ability to export to a calendar
-
 - Add custom time blocks for clubs, or lunch breaks
 
 - Ability to find empty study spots based on available rooms
-
-
-
 
 ## Feedback
 
