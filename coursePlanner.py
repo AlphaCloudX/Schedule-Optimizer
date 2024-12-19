@@ -120,20 +120,22 @@ if sortByAvgStartTime:
 
         print("\n\n")
 
-#Prompt user to export to calendar
-while True:
-    export = input("Export To Calendar? (y/n): ")
-    if export == 'y':
-        while True:
-            choice = input("Choose combination: ")
-            if choice.isnumeric():
-                choice = int(choice)
-                if choice in sortedTimeIndices1 or choice in sortedTimeIndices2:
-                    exportToIcal(validCombination[choice], allCourseData)
-                    break
-        break
-    if export == 'n':
-        break
+#ensure valid combinations exist 
+if len(validCombination) > 0:
+    #Prompt user to export to calendar
+    while True:
+        export = input("Export To Calendar? (y/n): ")
+        if export == 'y':
+            while True:
+                choice = input("Choose combination: ")
+                if choice.isnumeric():
+                    choice = int(choice)
+                    if choice in sortedTimeIndices1 or choice in sortedTimeIndices2:
+                        exportToIcal(validCombination[choice], allCourseData)
+                        break
+            break
+        if export == 'n':
+            break
 
 # Uncomment this code to draw the schedules out:
 
