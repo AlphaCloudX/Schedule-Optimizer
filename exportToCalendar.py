@@ -10,7 +10,7 @@ def exportToIcal(courses, allCourseData):
                 if j.courseCode == c.courseCode:
                     addSectionItems(j, newCal)
     #to_ical() returns bytes, so writing in binary is necessary 
-    newIcs = open("coursePlanner.ics", 'wb')
+    newIcs = open("coursePlan.ics", 'wb')
     newIcs.write(newCal.to_ical())
     print("Calendar exported.")
     newIcs.close()
