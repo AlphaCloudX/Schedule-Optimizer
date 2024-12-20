@@ -3,6 +3,7 @@ import json
 
 from CourseUtil import ScheduleItem, CourseSection, CoursePlanner
 from sortingMethods import *
+from exportToCalendar import exportToIcal
 
 # Input and data loading logic
 # Use the list instead of retyping everything
@@ -118,6 +119,23 @@ if sortByAvgStartTime:
             print(c.courseCode)
 
         print("\n\n")
+
+#ensure valid combinations exist 
+if len(validCombination) > 0:
+    #Prompt user to export to calendar
+    while True:
+        export = input("Export To Calendar? (y/n): ")
+        if export == 'y':
+            while True:
+                choice = input("Choose combination: ")
+                if choice.isnumeric():
+                    choice = int(choice)
+                    if choice in sortedTimeIndices1 or choice in sortedTimeIndices2:
+                        exportToIcal(validCombination[choice], allCourseData)
+                        break
+            break
+        if export == 'n':
+            break
 
 # Uncomment this code to draw the schedules out:
 
