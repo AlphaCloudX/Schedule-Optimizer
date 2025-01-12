@@ -42,6 +42,19 @@ A Python script designed to optimize your course layout by minimizing the time b
 
 ---
 
+## Screenshots
+
+### Main Page
+![Main Page](https://imgur.com/NSjOosf.png)
+
+### Results Page
+![Results Page](https://imgur.com/t4sMfM1.png)
+
+### Error Message
+![Error Message](https://imgur.com/LC6nPwQ.png)
+
+---
+
 ## Additional Contributions
 
 ### Calendar Export Support
