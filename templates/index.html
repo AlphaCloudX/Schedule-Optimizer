@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Schedule Planner</title>
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="GryphPlan">
+    <meta property="og:description" content="Your Better Than Web Advisor Course Scheduler.">
+    <meta property="og:image" content="https://michaelcz.pythonanywhere.com/static/img_1.png">
+    <meta property="og:url" content="https://michaelcz.pythonanywhere.com/course-planner">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Cards Meta Tags (for Twitter preview) -->
+    <meta name="twitter:title" content="GryphPlan">
+    <meta name="twitter:description" content="Your Better Than Web Advisor Course Scheduler.">
+    <meta name="twitter:image" content="https://michaelcz.pythonanywhere.com/static/img_1.png">
+    <meta name="twitter:card" content="summary_large_image">
+
+
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #f8f9fa;
+            margin-top: 40px;
+        }
+
+        .footer img {
+            width: 24px;
+            height: 24px;
+            margin: 0 10px;
+        }
+
+        .footer a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .button {
+            position: relative;
+            padding: 8px 16px;
+            background: #007bff;
+            border: none;
+            outline: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #ffffff;
+        }
+
+        .button:active {
+            background: #0056b3;
+        }
+
+        .button__text {
+            font: bold 16px "Arial", sans-serif;
+            transition: all 0.2s;
+        }
+
+        .button--loading .button__text {
+            visibility: hidden;
+            opacity: 0;
+        }
+
+        .button--loading::after {
+            content: "";
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            border: 4px solid transparent;
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: button-loading-spinner 1s ease infinite;
+        }
+
+        @keyframes button-loading-spinner {
+            from {
+                transform: rotate(0turn);
+            }
+
+            to {
+                transform: rotate(1turn);
+            }
+        }
+
+        .how-it-works img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .how-it-works {
+            margin-top: 40px;
+        }
+
+        .how-it-works h3 {
+            margin-bottom: 20px;
+        }
+
+        .back-button {
+            padding: 8px 16px;
+            background-color: #28a745;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .back-button:hover {
+            background-color: #218838;
+        }
+
+        .header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container mt-5">
+    <!-- Header with Back to Projects Button on the Right -->
+    <div class="header-row">
+        <h1>GryphPlan</h1>
+        <a href="/" class="back-button">Back to Projects</a>
+    </div>
+
+    <h4>Your Better Than Web Advisor Course Scheduler</h4>
+    <form method="POST" action="/" onsubmit="this.querySelector('.button').classList.toggle('button--loading')">
+        <div class="form-group">
+            <label for="courses">Enter Course Codes (comma-separated but with *'s):</label>
+            <input type="text" id="courses" name="courses[]" class="form-control"
+                   placeholder="e.g., CIS*2750, CIS*3110, CIS*3190">
+        </div>
+        <div class="form-group">
+            <label for="earliest">Earliest Time at School (HH:MM):</label>
+            <input type="time" id="earliest" name="earliest" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="latest">Latest Time at School (HH:MM):</label>
+            <input type="time" id="latest" name="latest" class="form-control">
+        </div>
+
+        <div>
+                <label>Select Semester:</label>
+                <br>
+                <input type="radio" id="fall2024" name="semester" value="Fall 2024">
+                <label for="fall2024">Fall 2024 (Current)</label>
+                <br>
+                <input type="radio" id="winter2025" name="semester" value="Winter 2025" checked>
+                <label for="winter2025">Winter 2025 (Upcoming)</label>
+        </div>
+
+        <button type="submit" class="button">
+            <span class="button__text">Generate Schedules</span>
+        </button>
+    </form>
+
+    <!-- How it Works Section -->
+    <div class="how-it-works">
+        <h3>How Does This Work?</h3>
+        <div class="row">
+            <div class="col-md-4">
+                <h5>Step 1: Enter Course Codes</h5>
+                <p>Enter the course codes in any of the following formats: <strong>COURSE*CODE</strong> (e.g.,
+                    CIS*2750),
+                    <strong>Course Code</strong> (e.g., CIS 2750), or <strong>CourseCode</strong> (e.g., CIS2750).
+                    Separate each course by a comma, and only enter courses for the next semester (Winter25).</p>
+
+                <p><strong>Proper Entry Examples:</strong></p>
+                <ul>
+                    <li>CIS*2750, CIS*3110, CIS*3190</li>
+                    <li>CIS 2750, CIS 3110, CIS 3190</li>
+                    <li>CIS2750, CIS3110, CIS3190</li>
+                    <li>CIS*2750, CIS 3110, CIS3190</li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h5>Step 2: Set Earliest and Latest Times (Optional, Leave Blank if not needed)</h5>
+                <p>Choose the earliest time you plan to be on campus and the latest time you plan to leave.</p>
+            </div>
+            <div class="col-md-4">
+                <h5>Step 3: Generate Schedule</h5>
+                <p>Click the 'Generate Schedules' button, and the tool will create possible schedules.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Made by: Michael</p>
+        <p>Visitors: 750+</p> <!-- Added visitor count here -->
+        <a href="https://github.com/AlphaCloudX" target="_blank">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" alt="GitHub logo">
+        </a>
+        <a href="https://www.linkedin.com/in/michael-czomko/" target="_blank">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png"
+                 alt="LinkedIn logo">
+        </a>
+    </footer>
+</div>
+</body>
+
+</html>

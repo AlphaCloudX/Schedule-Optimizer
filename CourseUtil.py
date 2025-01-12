@@ -78,8 +78,7 @@ class CoursePlanner:
                 # print("Found Valid Combination!")
                 validCombinations.append(possibleCombination)
 
-        print(f"Possible Non Overlapping Unfiltered Combinations:\n"
-              f"After: {len(validCombinations)} Before: {len(self.combinations)}")
+        print(f"Valid: {len(validCombinations)} Total: {len(self.combinations)}")
 
         return validCombinations
 

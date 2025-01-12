@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #f8f9fa;
+            margin-top: 40px;
+        }
+
+        .footer img {
+            width: 24px;
+            height: 24px;
+            margin: 0 10px;
+        }
+
+        .footer a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .button {
+            position: relative;
+            padding: 8px 16px;
+            background: #007bff;
+            border: none;
+            outline: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #ffffff;
+        }
+
+        .button:active {
+            background: #0056b3;
+        }
+
+        .button__text {
+            font: bold 16px "Arial", sans-serif;
+            transition: all 0.2s;
+        }
+
+        .button--loading .button__text {
+            visibility: hidden;
+            opacity: 0;
+        }
+
+        .overlay {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.7);
+            height: 100vh;
+            color: white;
+        }
+
+        .overlay-content {
+            background-color: #343a40;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            max-width: 600px;
+        }
+
+        .overlay-content h1 {
+            font-size: 24px;
+        }
+
+        .overlay-content p {
+            font-size: 18px;
+        }
+
+        .btn-back {
+            background-color: #007bff;
+            border: none;
+            padding: 10px 20px;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-back:hover {
+            background-color: #0056b3;
+        }
+
+        /* Style to remove bullet points */
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        ul li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="overlay">
+        <div class="overlay-content">
+            <h1>Error</h1>
+            {% if error_code == "No_Course_Entered" %}
+            <p>No course codes were entered. Please enter at least one course.</p>
+            {% elif error_code == "Invalid_Times" %}
+            <p>Invalid time range. Ensure that the earliest time is before the latest time.</p>
+            {% elif error_code == "Course_Not_Available" %}
+            <p>The following course codes are not available for the selected semester:</p>
+            <ul>
+                {% for course in invalid_courses %}
+                <li>{{ course }}</li>
+                {% endfor %}
+            </ul>
+            {% elif error_code == "File_Not_Found" %}
+            <p>Could not find the file for the selected semester.</p>
+            {% elif error_code == "No_Combinations" %}
+            <p>No valid schedule combinations could be generated.</p>
+            {% else %}
+            <p>An unknown error occurred. Please try again.</p>
+            {% endif %}
+            <button class="btn-back" onclick="window.location.href = '/';">Go Back</button>
+        </div>
+    </div>
+</body>
+
+</html>

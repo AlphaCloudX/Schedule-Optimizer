@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Schedule Results</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <style>
+        .header-container {
+            display: flex;
+            align-items: center; /* Vertically center the back arrow and title */
+            justify-content: center; /* Center the entire container horizontally */
+            margin-bottom: 20px; /* Space below the header */
+        }
+
+        .back-button {
+            font-size: 1.5rem;
+            text-decoration: none;
+            color: #007bff;
+            margin-right: 10px; /* Space between the back arrow and the title */
+        }
+
+        .back-button:hover {
+            color: #0056b3;
+        }
+
+        .schedule {
+            position: relative;
+            height: 840px;
+            border: 1px solid #ddd;
+            margin-top: 20px;
+            display: flex;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-center span {
+            margin: 0 5px; /* Adjusts space between elements */
+        }
+
+        .day {
+            flex: 1;
+            position: relative;
+            border-left: 1px solid #ddd;
+            min-width: 80px; /* Decrease min-width to allow more tables in a row */
+        }
+
+        .lecture {
+            background-color: rgba(255, 182, 193, 0.7);
+        }
+
+        .seminar {
+            background-color: rgba(173, 216, 230, 0.7);
+        }
+
+        .lab {
+            background-color: rgba(144, 238, 144, 0.7);
+        }
+
+        .time-block {
+            position: absolute;
+            border: 1px solid #007bff;
+            color: black;
+            padding: 5px;
+            border-radius: 4px;
+            white-space: normal;
+            width: 90%;
+            box-sizing: border-box;
+            left: 5%;
+            overflow: visible;
+            text-overflow: ellipsis;
+            font-size: calc(0.5rem + 0.05vw);
+            line-height: 1.2;
+        }
+
+        .time-block p {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .date-block {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* Flexbox layout for tables */
+        .table-container {
+            display: flex;
+            flex-wrap: wrap;  /* Allow tables to wrap into multiple rows */
+            justify-content: flex-start; /* Align tables to the start */
+            gap: 10px; /* Space between tables */
+            margin-bottom: 20px;
+        }
+
+        .table {
+            flex: 1 1 100px; /* Allow each table to grow/shrink, with a base width of 10px */
+            max-width: 1200px; /* Limit the maximum width of tables */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Add shadow for visual separation */
+            border-radius: 5px; /* Optional: Add rounded corners */
+        }
+
+        .padding-container {
+            padding: 10px; /* Add padding around the container */
+            margin: 0 auto; /* Center the container */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="padding-container">
+        <!-- Header container with back button and title -->
+        <div class="header-container">
+            <a href="/" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <h1>Schedule Combinations (<span>{{ combinations | length }} out of {{total_possible}}</span>)</h1>
+        </div>
+
+        {% set start_hour = earliestAtSchool // 60 %}
+        {% set start_minute = earliestAtSchool % 60 %}
+
+        {% set end_hour = latestAtSchool // 60 %}
+        {% set end_minute = latestAtSchool % 60 %}
+
+        <div class="text-center">
+            <span>Start Time: {{ start_hour if start_hour == 12 else start_hour % 12 }}:{{ '%02d' | format(start_minute) }} {{ 'AM' if start_hour < 12 else 'PM' }}</span>
+            <span> | </span>
+            <span>End Time: {{ end_hour if end_hour == 12 else end_hour % 12 }}:{{ '%02d' | format(end_minute) }} {{ 'AM' if end_hour < 12 else 'PM' }}</span>
+        </div>
+
+        <div class="text-center">
+            <span>Took: {{elapsed_time}} seconds.</span>
+        </div>
+
+        <br>
+
+        <div class="table-container">
+            {% for combination in combinations %}
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Total Time Between Classes (minutes)</th>
+                        <th>Courses</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="top-row">
+                        <td>{{ combination.total_time }}</td>
+                        <td>
+                            <ul>
+                                {% for course in combination.courses %}
+                                    <li>{{ course.courseCode }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div class="schedule">
+                                {% for day in ['M', 'T', 'W', 'Th', 'F', 'Sa'] %}
+                                    <div class="day">
+                                        <div class="date-block">{{ day }}</div>
+
+                                        {% for course in combination.courses %}
+                                            {% for schedule_item in [course.lecture, course.seminar, course.lab] %}
+                                                {% if schedule_item and day in schedule_item.days %}
+                                                    {% set start_time = schedule_item.start %}
+                                                    {% set finish_time = schedule_item.finish %}
+                                                    {% set start_hour = start_time // 60 %}
+                                                    {% set start_minute = start_time % 60 %}
+                                                    {% set finish_hour = finish_time // 60 %}
+                                                    {% set finish_minute = finish_time % 60 %}
+                                                    {% set total_schedule_height = 840 %}
+                                                    {% set total_day_minutes = 14 * 60 %}
+                                                    {% set offset_minutes = 480 %}
+                                                    {% set total_start_minutes = start_time %}
+                                                    {% set total_finish_minutes = finish_time %}
+                                                    {% set duration_minutes = total_finish_minutes - total_start_minutes %}
+                                                    {% set top_position = ((total_start_minutes - offset_minutes) / total_day_minutes) * total_schedule_height %}
+                                                    {% set height = (duration_minutes / total_day_minutes) * total_schedule_height %}
+
+                                                    <div class="time-block {{ schedule_item.item_type | lower }}" style="top: {{ top_position }}px; height: {{ height }}px;">
+                                                        <p>{{ schedule_item.item_type }}: {{ course.courseCode }}
+                                                        {{ start_hour if start_hour == 12 else start_hour % 12 }}:{{ '%02d' % start_minute }} {{ 'AM' if start_hour < 12 else 'PM' }} -
+                                                        {{ finish_hour if finish_hour == 12 else finish_hour % 12 }}:{{ '%02d' % finish_minute }} {{ 'AM' if finish_hour < 12 else 'PM' }}</p>
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endfor %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
